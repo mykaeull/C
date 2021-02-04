@@ -117,6 +117,25 @@ void em_ordem(Tree *t, Node *node) {
     }
 }
 
+int height(Tree *t, Node *node) {
+    if (node == NULL) {
+        node = t->root;
+    }
+    int hleft = 0;
+    int hright = 0;
+    if (node->left != NULL) {
+        hleft = height(t, node->left);
+    }
+    if (node->right != NULL) {
+        hright = height(t, node->right);
+    }
+    if (hleft > hright) {
+        return hleft + 1;
+    } else {
+        return hright + 1;
+    }
+}
+
 int main() {
 
     Tree t1 = create_tree(5);
@@ -135,9 +154,13 @@ int main() {
 
     pos_ordem(&t1, NULL);
     printf("\n");
-    pre_ordem(&t1, NULL);
+    pre_ordem(&t1, node1);
     printf("\n");
     em_ordem(&t1, NULL);
+    printf("\n");
+    printf("altura: %d", height(&t1, NULL));
+    printf("\n");
+    printf("altura: %d", height(&t1, node1));
 
     return 0;
 }
