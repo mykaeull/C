@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "./cadeia.h"
 
 char *arr[901]; // global
 
@@ -44,82 +45,53 @@ void preencher_arr() {
 	arr[900] = "novecentos";
 }
 
-int str_tamanho(char *s) {
-    int tam = 0;
-    while(s[tam]) {
-        tam ++;
-    }
-    return tam;
-}
-
-void str_copia(char *s, char *d) {
-    int i = 0;
-    while(s[i] != '\0') { 
-        d[i] = s[i]; 
-        i++;
-    }
-    d[i] = '\0';
-}
-
-void str_concatena(char *s, char *d) {
-    int i = 0, j = 0;
-    while(d[i] != '\0') {
-        i++; 
-    }
-    while(s[j] != '\0') { 
-        d[i] = s[j]; 
-        i++;
-        j++;
-    }
-    d[i] = '\0';
-}
-
 char* num_ext(int n) {
-    int num_dig = floor(log10(n)) + 1;
-    char *concat = (char*)malloc(sizeof(char)*100);
+    int num_dig = floor(log10(n)) + 1; // fórmula para a quantidade de dígitos de um número
+    char *extenso = (char*)malloc(sizeof(char)*1024);
     int unidade, dezena, centena;
     
-    if (n == 0) {
-        printf("-1");
+    if (n <= 0 || n > 999) {
+        printf("numero invalido.");
+        return 0;
     } else {
         if (num_dig == 1) {
-            sprintf(concat, arr[n]);
+            sprintf(extenso, arr[n]);
         } else if (num_dig == 2) {
             if (n > 9 && n < 20) {
-                sprintf(concat, arr[n]);
+                sprintf(extenso, arr[n]);
             } else {
                 unidade = n % 10;
                 dezena = n - unidade;
                 if (unidade == 0){
-                    sprintf(concat, arr[dezena]);
+                    sprintf(extenso, arr[dezena]);
                 } else {
-                    sprintf(concat, "%s %s %s", arr[dezena], "e", arr[unidade]);
+                    sprintf(extenso, "%s %s %s", arr[dezena], "e", arr[unidade]);
                 }
             }
         } else {
             if (n == 100) {
-                sprintf(concat, arr[0]);
+                sprintf(extenso, arr[0]);
             } else {                       
                 centena = (n / 100) * 100; 
                 unidade = n % 10;          
                 dezena = (n - centena) - unidade; 
                 if (unidade == 0) {
-                    sprintf(concat, "%s %s %s", arr[centena], "e", arr[dezena]);
+                    sprintf(extenso, "%s %s %s", arr[centena], "e", arr[dezena]);
                 } else if (dezena == 10) {
-                    sprintf(concat, "%s %s %s", arr[centena], "e", arr[dezena+unidade]);
+                    sprintf(extenso, "%s %s %s", arr[centena], "e", arr[dezena+unidade]);
                 } else {
-                    sprintf(concat, "%s %s %s %s %s", arr[centena], "e", arr[dezena], "e", arr[unidade]);
+                    sprintf(extenso, "%s %s %s %s %s", arr[centena], "e", arr[dezena], "e", arr[unidade]);
                 }
             }
         }
     }
-    return concat;
+    return extenso;
 }
 
 int main(int argc, char *argv[]) {
     int n, x, primeiro = 0;
     char *c;
-    char numextenso[1024];
+    char numextenso[1000];
     int tam;
 
     preencher_arr();
@@ -134,7 +106,6 @@ int main(int argc, char *argv[]) {
         printf("%s\n", numextenso);
         printf("tamanho da string: %d", tam);
 
-        // printf("\ntamanho da string: %d", tam);
     } else {
         FILE *arq;
         char num[1000];
@@ -144,9 +115,9 @@ int main(int argc, char *argv[]) {
             return EXIT_FAILURE;
         }
         while(fgets(num, 5, arq) != NULL) {
-            x = atoi(num); 
+            x = atoi(num);
+            printf("%d\n", x); 
             c = num_ext(x); 
-            printf("%d\n", x);
 
             if (primeiro == 0) {
                 str_copia(c, numextenso);
