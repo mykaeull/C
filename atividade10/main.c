@@ -148,6 +148,25 @@ void verificar_opcao(Lista *lista, char *opcao) {
             cont++;
         }
         fclose(arq);
+    } else if (opcao[0] == 'S') {
+        printf("digite o caminho: \n");
+        scanf("%s", caminho);
+        getchar();
+        arq = fopen(caminho, "w");
+        if (lista->primeiro == NULL) {
+            printf("nao foi possivel copiar os dados pois estes nao existem");
+        } else {
+            Agenda *aux = lista->primeiro;
+            while (aux != NULL) {
+                fprintf(arq, "%s\n", aux->nome);
+                fprintf(arq, "%d\n", aux->matricula);
+                fprintf(arq, "%d\n", aux->ddd);
+                fprintf(arq, "%d\n", aux->telefone);
+                fprintf(arq, "%c\n", aux->tipo);
+                aux = aux->proximo;
+            }
+            fclose(arq);
+        }
     }
 }
 
